@@ -15,19 +15,15 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.Objects;
 
 @SuppressWarnings("NullableProblems")
-public interface JsonCompatiblePrimitive<T> extends JsonPrimitiveGetter<T>, JsonPrimitiveSetter<T>, PersistentDataType<T, T>
+public abstract class JsonCompatiblePrimitive<T> implements JsonPrimitiveGetter<T>, JsonPrimitiveSetter<T>, PersistentDataType<T, T>
 {
 	static <T> JsonCompatiblePrimitive<T> of(Class<T> type, JsonPrimitiveGetter<T> getter, JsonPrimitiveSetter<T> setter)
 	{
-		Objects.requireNonNull(type, "type");
 		Objects.requireNonNull(getter, "getter");
 		Objects.requireNonNull(setter, "setter");
 		
-		return new JsonCompatiblePrimitive<>()
+		return new JsonCompatiblePrimitive<>(type)
 		{
-			@Override
-			public Class<T> getPrimitiveType() { return type; }
-			
 			@Override
 			public T getFromJson(JsonElement element) { return getter.getFromJson(element); }
 			
@@ -36,12 +32,22 @@ public interface JsonCompatiblePrimitive<T> extends JsonPrimitiveGetter<T>, Json
 		};
 	}
 	
-	@Override
-	default Class<T> getComplexType() { return getPrimitiveType(); }
+	private final Class<T> primitiveType;
+	
+	public JsonCompatiblePrimitive(Class<T> primitiveType)
+	{
+		this.primitiveType = Objects.requireNonNull(primitiveType, "primitiveType");
+	}
 	
 	@Override
-	default T toPrimitive(T complex, PersistentDataAdapterContext context) { return complex; }
+	public Class<T> getPrimitiveType() { return primitiveType; }
 	
 	@Override
-	default T fromPrimitive(T primitive, PersistentDataAdapterContext context) { return primitive; }
+	public Class<T> getComplexType() { return primitiveType; }
+	
+	@Override
+	public T toPrimitive(T complex, PersistentDataAdapterContext context) { return complex; }
+	
+	@Override
+	public T fromPrimitive(T primitive, PersistentDataAdapterContext context) { return primitive; }
 }

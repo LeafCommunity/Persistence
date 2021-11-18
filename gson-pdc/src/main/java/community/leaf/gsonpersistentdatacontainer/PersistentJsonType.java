@@ -28,8 +28,86 @@ public class PersistentJsonType
 	public static final JsonCompatiblePrimitive<Byte> BYTE =
 		JsonCompatiblePrimitive.of(Byte.class, JsonElement::getAsByte, JsonPrimitiveSetter.number());
 	
+	public static final JsonCompatiblePrimitive<Short> SHORT =
+		JsonCompatiblePrimitive.of(Short.class, JsonElement::getAsShort, JsonPrimitiveSetter.number());
+	
+	public static final JsonCompatiblePrimitive<Integer> INTEGER =
+		JsonCompatiblePrimitive.of(Integer.class, JsonElement::getAsInt, JsonPrimitiveSetter.number());
+	
+	public static final JsonCompatiblePrimitive<Long> LONG =
+		JsonCompatiblePrimitive.of(Long.class, JsonElement::getAsLong, JsonPrimitiveSetter.number());
+	
+	public static final JsonCompatiblePrimitive<Float> FLOAT =
+		JsonCompatiblePrimitive.of(Float.class, JsonElement::getAsFloat, JsonPrimitiveSetter.number());
+	
+	public static final JsonCompatiblePrimitive<Double> DOUBLE =
+		JsonCompatiblePrimitive.of(Double.class, JsonElement::getAsDouble, JsonPrimitiveSetter.number());
+	
 	public static final JsonCompatiblePrimitive<String> STRING =
 		JsonCompatiblePrimitive.of(String.class, JsonElement::getAsString, JsonObject::addProperty);
+	
+	public static final JsonCompatiblePrimitive<byte[]> BYTE_ARRAY =
+		new JsonCompatiblePrimitive<>(byte[].class)
+		{
+			@Override
+			public byte[] getFromJson(JsonElement element)
+			{
+				JsonArray array = element.getAsJsonArray();
+				byte[] bytes = new byte[array.size()];
+				for (int i = 0; i < array.size(); i++) { bytes[i] = array.get(i).getAsByte(); }
+				return bytes;
+			}
+			
+			@Override
+			public void setInJson(JsonObject object, String key, byte[] primitive)
+			{
+				JsonArray array = new JsonArray();
+				for (byte b : primitive) { array.add(b); }
+				object.add(key, array);
+			}
+		};
+	
+	public static final JsonCompatiblePrimitive<int[]> INTEGER_ARRAY =
+		new JsonCompatiblePrimitive<>(int[].class)
+		{
+			@Override
+			public int[] getFromJson(JsonElement element)
+			{
+				JsonArray array = element.getAsJsonArray();
+				int[] integers = new int[array.size()];
+				for (int i = 0; i < array.size(); i++) { integers[i] = array.get(i).getAsInt(); }
+				return integers;
+			}
+			
+			@Override
+			public void setInJson(JsonObject object, String key, int[] primitive)
+			{
+				JsonArray array = new JsonArray();
+				for (int i : primitive) { array.add(i); }
+				object.add(key, array);
+			}
+		};
+	
+	public static final JsonCompatiblePrimitive<long[]> LONG_ARRAY =
+		new JsonCompatiblePrimitive<>(long[].class)
+		{
+			@Override
+			public long[] getFromJson(JsonElement element)
+			{
+				JsonArray array = element.getAsJsonArray();
+				long[] longs = new long[array.size()];
+				for (int i = 0; i < array.size(); i++) { longs[i] = array.get(i).getAsLong(); }
+				return longs;
+			}
+			
+			@Override
+			public void setInJson(JsonObject object, String key, long[] primitive)
+			{
+				JsonArray array = new JsonArray();
+				for (long l : primitive) { array.add(l); }
+				object.add(key, array);
+			}
+		};
 	
 	public static final JsonCompatiblePrimitive<PersistentDataContainer> TAG_CONTAINER =
 		JsonCompatiblePrimitive.of(
@@ -39,26 +117,35 @@ public class PersistentJsonType
 		);
 	
 	public static final JsonCompatiblePrimitive<PersistentDataContainer[]> TAG_CONTAINER_ARRAY =
-		JsonCompatiblePrimitive.of(
-			PersistentDataContainer[].class,
-			(element) ->
+		new JsonCompatiblePrimitive<>(PersistentDataContainer[].class)
+		{
+			@Override
+			public PersistentDataContainer[] getFromJson(JsonElement element)
 			{
 				List<PersistentDataContainer> containers = new ArrayList<>();
-				for (JsonElement item : element.getAsJsonArray()) { containers.add(TAG_CONTAINER.getFromJson(item)); }
+				
+				for (JsonElement item : element.getAsJsonArray())
+				{
+					containers.add(PersistentJsonType.TAG_CONTAINER.getFromJson(item));
+				}
+				
 				return containers.toArray(PersistentDataContainer[]::new);
-			},
-			(object, key, primitive) ->
+			}
+			
+			@Override
+			public void setInJson(JsonObject object, String key, PersistentDataContainer[] primitive)
 			{
 				JsonArray array = new JsonArray();
 				
+				// TODO: accept original PDC too?
 				Arrays.stream(primitive)
-				.map(container -> (GsonPersistentDataContainer) container)
-				.map(GsonPersistentDataContainer::json)
-				.forEach(array::add);
+					.map(container -> (GsonPersistentDataContainer) container)
+					.map(GsonPersistentDataContainer::json)
+					.forEach(array::add);
 				
 				object.add(key, array);
 			}
-		);
+		};
 	
 	public static final Map<Class<?>, JsonCompatiblePrimitive<?>> TYPES;
 	
