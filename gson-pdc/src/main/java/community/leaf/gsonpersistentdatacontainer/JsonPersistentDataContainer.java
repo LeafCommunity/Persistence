@@ -22,26 +22,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("NullableProblems")
-public class GsonPersistentDataContainer implements PersistentDataContainer
+public class JsonPersistentDataContainer implements PersistentDataContainer
 {
-	public static <Z> GsonPersistentDataContainer of(PersistentDataType<PersistentDataContainer, Z> type, Z complex)
+	public static <Z> JsonPersistentDataContainer of(PersistentDataType<PersistentDataContainer, Z> type, Z complex)
 	{
-		return (GsonPersistentDataContainer) type.toPrimitive(complex, GsonPersistentDataContainer::new);
+		return (JsonPersistentDataContainer) type.toPrimitive(complex, JsonPersistentDataContainer::new);
 	}
 	
 	public static <Z> Z fromJsonString(PersistentDataType<PersistentDataContainer, Z> type, String json)
 	{
 		return type.fromPrimitive(
-			new GsonPersistentDataContainer(new JsonParser().parse(json).getAsJsonObject()),
-			GsonPersistentDataContainer::new
+			new JsonPersistentDataContainer(new JsonParser().parse(json).getAsJsonObject()),
+			JsonPersistentDataContainer::new
 		);
 	}
 	
 	private final JsonObject json;
 	
-	public GsonPersistentDataContainer(JsonObject json) { this.json = json; }
+	public JsonPersistentDataContainer(JsonObject json) { this.json = json; }
 	
-	public GsonPersistentDataContainer() { this(new JsonObject()); }
+	public JsonPersistentDataContainer() { this(new JsonObject()); }
 	
 	public JsonObject json() { return json; }
 	
@@ -124,6 +124,6 @@ public class GsonPersistentDataContainer implements PersistentDataContainer
 	@Override
 	public PersistentDataAdapterContext getAdapterContext()
 	{
-		return GsonPersistentDataContainer::new;
+		return JsonPersistentDataContainer::new;
 	}
 }

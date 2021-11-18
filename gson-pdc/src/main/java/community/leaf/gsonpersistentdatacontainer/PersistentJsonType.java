@@ -112,8 +112,8 @@ public class PersistentJsonType
 	public static final JsonCompatiblePrimitive<PersistentDataContainer> TAG_CONTAINER =
 		JsonCompatiblePrimitive.of(
 			PersistentDataContainer.class,
-			(element) -> new GsonPersistentDataContainer(element.getAsJsonObject()),
-			(object, key, primitive) -> object.add(key, ((GsonPersistentDataContainer) primitive).json())
+			(element) -> new JsonPersistentDataContainer(element.getAsJsonObject()),
+			(object, key, primitive) -> object.add(key, ((JsonPersistentDataContainer) primitive).json())
 		);
 	
 	public static final JsonCompatiblePrimitive<PersistentDataContainer[]> TAG_CONTAINER_ARRAY =
@@ -139,8 +139,8 @@ public class PersistentJsonType
 				
 				// TODO: accept original PDC too?
 				Arrays.stream(primitive)
-					.map(container -> (GsonPersistentDataContainer) container)
-					.map(GsonPersistentDataContainer::json)
+					.map(container -> (JsonPersistentDataContainer) container)
+					.map(JsonPersistentDataContainer::json)
 					.forEach(array::add);
 				
 				object.add(key, array);
