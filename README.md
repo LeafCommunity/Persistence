@@ -1,11 +1,11 @@
 # 🗃️ GsonPersistentDataContainer
 
-[![](https://jitpack.io/v/community.leaf/gsonpersistentdatacontainer.svg)](https://jitpack.io/#community.leaf/tasks "Get maven artifacts on JitPack")
+[![](https://jitpack.io/v/community.leaf/gsonpersistentdatacontainer.svg)](https://jitpack.io/#community.leaf/gsonpersistentdatacontainer "Get maven artifacts on JitPack")
 [![](https://img.shields.io/badge/License-MPL--2.0-blue)](./LICENSE "Project License: MPL-2.0")
 [![](https://img.shields.io/badge/Java-11-orange)](# "Java Version: 11")
 [![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/gsonpersistentdatacontainer/gson-pdc-parent/latest/javadoc/ "View Javadocs")
 
-PersistentDataContainer, but targets GSON.
+PersistentDataContainer, but in JSON (using Gson).
 
 ## Maven
 
