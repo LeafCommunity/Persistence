@@ -34,7 +34,7 @@ public abstract class JsonCompatiblePrimitive<T> implements JsonPrimitiveGetter<
 	
 	private final Class<T> primitiveType;
 	
-	public JsonCompatiblePrimitive(Class<T> primitiveType)
+	JsonCompatiblePrimitive(Class<T> primitiveType)
 	{
 		this.primitiveType = Objects.requireNonNull(primitiveType, "primitiveType");
 	}
