@@ -40,7 +40,8 @@
 
     <modules>
         <module>json-persistent-data-container</module>
-    </modules>
+		<module>persistence-utilities</module>
+	</modules>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
