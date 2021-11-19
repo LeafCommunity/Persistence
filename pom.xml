@@ -4,14 +4,14 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>community.leaf.gsonpersistentdatacontainer</groupId>
-	<artifactId>gson-pdc-parent</artifactId>
+	<groupId>community.leaf.persistence</groupId>
+	<artifactId>persistence-parent</artifactId>
 	<packaging>pom</packaging>
     <version>${revision}</version> <!-- Change the version number in .mvn/maven.config -->
 
-	<name>GsonPersistentDataContainer</name>
+	<name>Persistence</name>
     <inceptionYear>2021</inceptionYear>
-    <description>Gson implementation of PersistentDataContainer.</description>
+    <description>PersistentDataContainer utilities.</description>
 
     <licenses>
         <license>
@@ -28,18 +28,18 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/LeafCommunity/GsonPersistentDataContainer.git</connection>
-        <developerConnection>scm:git:ssh://github.com:LeafCommunity/GsonPersistentDataContainer.git</developerConnection>
-        <url>http://github.com/LeafCommunity/GsonPersistentDataContainer</url>
+        <connection>scm:git:git://github.com/LeafCommunity/Persistence.git</connection>
+        <developerConnection>scm:git:ssh://github.com:LeafCommunity/Persistence.git</developerConnection>
+        <url>http://github.com/LeafCommunity/Persistence</url>
     </scm>
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/LeafCommunity/GsonPersistentDataContainer/issues</url>
+        <url>https://github.com/LeafCommunity/Persistence/issues</url>
     </issueManagement>
 
     <modules>
-        <module>gson-pdc</module>
+        <module>json-persistent-data-container</module>
     </modules>
 
     <properties>
@@ -50,7 +50,7 @@
         <!-- License headers -->
         <license.header.year>${project.inceptionYear}</license.header.year>
         <license.header.owner>RezzedUp</license.header.owner>
-        <license.header.url>https://github.com/LeafCommunity/GsonPersistentDataContainer</license.header.url>
+        <license.header.url>https://github.com/LeafCommunity/Persistence</license.header.url>
     </properties>
 
     <repositories>

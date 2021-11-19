@@ -1,11 +1,11 @@
-# 🗃️ GsonPersistentDataContainer
+# 🗃️ Persistence
 
-[![](https://jitpack.io/v/community.leaf/gsonpersistentdatacontainer.svg)](https://jitpack.io/#community.leaf/gsonpersistentdatacontainer "Get maven artifacts on JitPack")
+[![](https://jitpack.io/v/community.leaf/persistence.svg)](https://jitpack.io/#community.leaf/persistence "Get maven artifacts on JitPack")
 [![](https://img.shields.io/badge/License-MPL--2.0-blue)](./LICENSE "Project License: MPL-2.0")
 [![](https://img.shields.io/badge/Java-11-orange)](# "Java Version: 11")
-[![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/gsonpersistentdatacontainer/gson-pdc-parent/latest/javadoc/ "View Javadocs")
+[![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/persistence/persistence-parent/latest/javadoc/ "View Javadocs")
 
-PersistentDataContainer, but in JSON (using Gson).
+PersistentDataContainer utilities.
 
 ## Maven
 
@@ -20,8 +20,8 @@ PersistentDataContainer, but in JSON (using Gson).
 
 ```xml
 <dependency>
-    <groupId>community.leaf.gsonpersistentdatacontainer</groupId>
-    <artifactId>gson-pdc</artifactId>
+    <groupId>community.leaf.persistence</groupId>
+    <artifactId>json-persistent-data-container</artifactId>
     <version><!--release--></version>
 </dependency>
 ```

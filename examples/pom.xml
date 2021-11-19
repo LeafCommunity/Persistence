@@ -4,8 +4,8 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>community.leaf.gsonpersistentdatacontainer</groupId>
-		<artifactId>gson-pdc-parent</artifactId>
+		<groupId>community.leaf.persistence</groupId>
+		<artifactId>persistence-parent</artifactId>
 		<version>${revision}</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>gson-pdc-example-plugin</module>
+		<module>json-pdc-example-plugin</module>
 	</modules>
 
 </project>
