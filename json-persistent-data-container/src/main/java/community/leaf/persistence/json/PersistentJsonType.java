@@ -82,6 +82,18 @@ public class PersistentJsonType
 			JsonObject::addProperty
 		);
 	
+	private static <T> List<T> listOf(JsonArray array, JsonCompatiblePrimitive<T> primitive)
+	{
+		List<T> list = new ArrayList<>();
+		
+		for (JsonElement e : array)
+		{
+			if (primitive.isInstance(e)) { list.add(primitive.getFromJson(e)); }
+		}
+		
+		return list;
+	}
+	
 	public static final JsonCompatiblePrimitive<byte[]> BYTE_ARRAY =
 		new JsonCompatiblePrimitive<>(byte[].class)
 		{
@@ -94,9 +106,11 @@ public class PersistentJsonType
 			@Override
 			public byte[] getFromJson(JsonElement element)
 			{
-				JsonArray array = element.getAsJsonArray();
-				byte[] bytes = new byte[array.size()];
-				for (int i = 0; i < array.size(); i++) { bytes[i] = array.get(i).getAsByte(); }
+				List<Byte> list = listOf(element.getAsJsonArray(), PersistentJsonType.BYTE);
+				
+				byte[] bytes = new byte[list.size()];
+				for (int i = 0; i < list.size(); i++) { bytes[i] = list.get(i); }
+				
 				return bytes;
 			}
 			
@@ -121,9 +135,11 @@ public class PersistentJsonType
 			@Override
 			public int[] getFromJson(JsonElement element)
 			{
-				JsonArray array = element.getAsJsonArray();
-				int[] integers = new int[array.size()];
-				for (int i = 0; i < array.size(); i++) { integers[i] = array.get(i).getAsInt(); }
+				List<Integer> list = listOf(element.getAsJsonArray(), PersistentJsonType.INTEGER);
+				
+				int[] integers = new int[list.size()];
+				for (int i = 0; i < list.size(); i++) { integers[i] = list.get(i); }
+				
 				return integers;
 			}
 			
@@ -148,9 +164,11 @@ public class PersistentJsonType
 			@Override
 			public long[] getFromJson(JsonElement element)
 			{
-				JsonArray array = element.getAsJsonArray();
-				long[] longs = new long[array.size()];
-				for (int i = 0; i < array.size(); i++) { longs[i] = array.get(i).getAsLong(); }
+				List<Long> list = listOf(element.getAsJsonArray(), PersistentJsonType.LONG);
+				
+				long[] longs = new long[list.size()];
+				for (int i = 0; i < list.size(); i++) { longs[i] = list.get(i); }
+				
 				return longs;
 			}
 			
@@ -183,14 +201,8 @@ public class PersistentJsonType
 			@Override
 			public PersistentDataContainer[] getFromJson(JsonElement element)
 			{
-				List<PersistentDataContainer> containers = new ArrayList<>();
-				
-				for (JsonElement item : element.getAsJsonArray())
-				{
-					containers.add(PersistentJsonType.TAG_CONTAINER.getFromJson(item));
-				}
-				
-				return containers.toArray(PersistentDataContainer[]::new);
+				return listOf(element.getAsJsonArray(), PersistentJsonType.TAG_CONTAINER)
+					.toArray(PersistentDataContainer[]::new);
 			}
 			
 			@Override
