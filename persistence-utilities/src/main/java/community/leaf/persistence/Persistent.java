@@ -8,6 +8,8 @@
 package community.leaf.persistence;
 
 import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.function.BiFunction;
@@ -50,6 +52,11 @@ public interface Persistent<T, Z extends Persistent<T, Z>>
 			(complex, ignored) -> toPrimitive.apply(complex),
 			(primitive, ignored) -> fromPrimitive.apply(primitive)
 		);
+	}
+	
+	static PersistentDataContainer container(PersistentDataHolder holder)
+	{
+		return holder.getPersistentDataContainer();
 	}
 	
 	PersistentDataType<T, Z> persistentDataType();

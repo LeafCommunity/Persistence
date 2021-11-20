@@ -10,11 +10,22 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>examples</artifactId>
+	<artifactId>persistence-all</artifactId>
 	<packaging>pom</packaging>
 
-	<modules>
-		<module>persistence-example-plugin</module>
-	</modules>
+	<dependencies>
+		<!-- JSON PDC (via local-project) -->
+		<dependency>
+			<groupId>community.leaf.persistence</groupId>
+			<artifactId>json-persistent-data-container</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<!-- Persistence Utilities (via local-project) -->
+		<dependency>
+			<groupId>community.leaf.persistence</groupId>
+			<artifactId>persistence-utilities</artifactId>
+			<version>${revision}</version>
+		</dependency>
+	</dependencies>
 
 </project>

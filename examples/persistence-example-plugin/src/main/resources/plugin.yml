@@ -1,0 +1,3 @@
+main: community.leaf.examples.persistence.ExamplePersistencePlugin
+name: persistence-example-plugin
+version: ${revision}

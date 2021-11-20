@@ -40,7 +40,8 @@
 
     <modules>
         <module>json-persistent-data-container</module>
-		<module>persistence-utilities</module>
+        <module>persistence-all</module>
+        <module>persistence-utilities</module>
 	</modules>
 
     <properties>
