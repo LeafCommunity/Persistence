@@ -21,10 +21,18 @@ PersistentDataContainer utilities.
 ```xml
 <dependency>
     <groupId>community.leaf.persistence</groupId>
-    <artifactId>json-persistent-data-container</artifactId>
+    <artifactId><!--module--><</artifactId>
     <version><!--release--></version>
 </dependency>
 ```
+
+### Modules
+
+- **`persistence-utilities`** → 🧰
+    - Various utilities for PersistentDataContainers, including
+      more persistent data types.
+- **`json-persistent-data-container`** → 🗄️
+    - PersistentDataContainer implementation for JSON (using Gson).
 
 ### Versions
 
