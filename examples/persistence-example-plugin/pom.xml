@@ -59,6 +59,15 @@
 							<exclude>pl.tlinkowski.annotation:pl.tlinkowski.annotation.basic</exclude>
 						</excludes>
 					</artifactSet>
+					<filters>
+						<filter>
+							<!-- Exclude redundant metadata files -->
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/**</exclude>
+							</excludes>
+						</filter>
+					</filters>
 				</configuration>
 			</plugin>
 		</plugins>

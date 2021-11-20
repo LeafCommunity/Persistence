@@ -11,20 +11,30 @@
 	</parent>
 
 	<artifactId>persistence-all</artifactId>
-	<packaging>pom</packaging>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Persistence BOM (via local-project) -->
+			<dependency>
+				<groupId>community.leaf.persistence</groupId>
+				<artifactId>persistence-bom</artifactId>
+				<version>${revision}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<!-- JSON PDC (via local-project) -->
 		<dependency>
 			<groupId>community.leaf.persistence</groupId>
 			<artifactId>json-persistent-data-container</artifactId>
-			<version>${revision}</version>
 		</dependency>
 		<!-- Persistence Utilities (via local-project) -->
 		<dependency>
 			<groupId>community.leaf.persistence</groupId>
 			<artifactId>persistence-utilities</artifactId>
-			<version>${revision}</version>
 		</dependency>
 	</dependencies>
 

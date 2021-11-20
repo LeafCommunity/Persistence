@@ -1,3 +1,4 @@
 main: community.leaf.examples.persistence.ExamplePersistencePlugin
 name: persistence-example-plugin
 version: ${revision}
+api-version: 1.13
