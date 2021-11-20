@@ -2,14 +2,11 @@ package community.leaf.examples.persistence;
 
 import community.leaf.persistence.Persistent;
 import community.leaf.persistence.PersistentDataTypes;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import pl.tlinkowski.annotation.basic.NullOr;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 import static community.leaf.examples.persistence.ExamplePersistencePlugin.key;
