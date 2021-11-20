@@ -7,9 +7,12 @@
  */
 package community.leaf.persistence.json;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import community.leaf.persistence.Persistent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -24,17 +27,28 @@ import java.util.stream.Collectors;
 @SuppressWarnings("NullableProblems")
 public class JsonPersistentDataContainer implements PersistentDataContainer
 {
+	private static final Gson PRETTY_PRINTER = new GsonBuilder().setPrettyPrinting().create();
+	
+	private static final JsonParser PARSER = new JsonParser();
+	
 	public static <Z> JsonPersistentDataContainer of(PersistentDataType<PersistentDataContainer, Z> type, Z complex)
 	{
 		return (JsonPersistentDataContainer) type.toPrimitive(complex, JsonPersistentDataContainer::new);
 	}
 	
+	public static <Z extends Persistent<PersistentDataContainer, Z>> JsonPersistentDataContainer of(Z complex)
+	{
+		return of(complex.persistentDataType(), complex);
+	}
+	
+	public static JsonPersistentDataContainer fromJsonString(String json)
+	{
+		return new JsonPersistentDataContainer(PARSER.parse(json).getAsJsonObject());
+	}
+	
 	public static <Z> Z fromJsonString(PersistentDataType<PersistentDataContainer, Z> type, String json)
 	{
-		return type.fromPrimitive(
-			new JsonPersistentDataContainer(new JsonParser().parse(json).getAsJsonObject()),
-			JsonPersistentDataContainer::new
-		);
+		return type.fromPrimitive(fromJsonString(json), JsonPersistentDataContainer::new);
 	}
 	
 	private final JsonObject json;
@@ -44,6 +58,10 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 	public JsonPersistentDataContainer() { this(new JsonObject()); }
 	
 	public JsonObject json() { return json; }
+	
+	public String toJsonString() { return json.getAsString(); }
+	
+	public String toPrettyJsonString() { return PRETTY_PRINTER.toJson(json); }
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -79,7 +97,7 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 		if (primitive == null)
 		{
 			throw new IllegalArgumentException(
-				"Unsupported type: " + type + " (" + type.getPrimitiveType() + ")"
+				"Unsupported primitive type: " + type + " (" + type.getPrimitiveType() + ")"
 			);
 		}
 		

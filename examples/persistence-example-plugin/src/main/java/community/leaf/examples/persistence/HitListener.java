@@ -1,8 +1,5 @@
 package community.leaf.examples.persistence;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import community.leaf.persistence.Persistent;
 import community.leaf.persistence.json.JsonPersistentDataContainer;
 import net.md_5.bungee.api.ChatColor;
@@ -23,7 +20,6 @@ import static community.leaf.examples.persistence.ExamplePersistencePlugin.key;
 
 public class HitListener implements Listener
 {
-	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	private final ExamplePersistencePlugin plugin;
 	
 	public HitListener(ExamplePersistencePlugin plugin)
@@ -81,9 +77,9 @@ public class HitListener implements Listener
 		@NullOr HitCounter counter = Persistent.container(clicked).get(key("hit_counter"), HitCounter.TYPE);
 		if (counter == null) { return; }
 		
-		JsonObject json = JsonPersistentDataContainer.of(HitCounter.TYPE, counter).json();
+		String json = JsonPersistentDataContainer.of(counter).toPrettyJsonString();
 		
 		player.sendMessage(ChatColor.GRAY + clicked.getName() + "'s hit counter:");
-		player.sendMessage(ChatColor.GOLD + gson.toJson(json));
+		player.sendMessage(ChatColor.GOLD + json);
 	}
 }
