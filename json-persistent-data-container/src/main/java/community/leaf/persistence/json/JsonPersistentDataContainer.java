@@ -53,9 +53,15 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 	
 	private final JsonObject json;
 	
-	public JsonPersistentDataContainer(JsonObject json) { this.json = json; }
+	public JsonPersistentDataContainer(JsonObject json)
+	{
+		this.json = Objects.requireNonNull(json, "json");
+	}
 	
-	public JsonPersistentDataContainer() { this(new JsonObject()); }
+	public JsonPersistentDataContainer()
+	{
+		this(new JsonObject());
+	}
 	
 	public JsonObject json() { return json; }
 	
@@ -64,19 +70,28 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 	public String toPrettyJsonString() { return PRETTY_PRINTER.toJson(json); }
 	
 	@SuppressWarnings("unchecked")
-	@Override
-	public <T, Z> void set(NamespacedKey key, PersistentDataType<T, Z> type, Z value)
+	private <T> JsonCompatiblePrimitive<T> primitive(PersistentDataType<T, ?> type)
 	{
 		@NullOr JsonCompatiblePrimitive<T> primitive =
 			(JsonCompatiblePrimitive<T>) PersistentJsonType.TYPES.get(type.getPrimitiveType());
 		
 		if (primitive == null)
 		{
-			throw new IllegalArgumentException(
-				"Unsupported type: " + type.getPrimitiveType() + " (" + type + ")"
-			);
+			throw new IllegalArgumentException("Unsupported primitive type: " + type.getPrimitiveType());
 		}
 		
+		return primitive;
+	}
+	
+	
+	@Override
+	public <T, Z> void set(NamespacedKey key, PersistentDataType<T, Z> type, Z value)
+	{
+		Objects.requireNonNull(key, "key");
+		Objects.requireNonNull(type, "type");
+		Objects.requireNonNull(value, "value");
+		
+		JsonCompatiblePrimitive<T> primitive = primitive(type);
 		T converted = type.toPrimitive(value, getAdapterContext());
 		primitive.setInJson(json, key.toString(), converted);
 	}
@@ -84,25 +99,32 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 	@Override
 	public <T, Z> boolean has(NamespacedKey key, PersistentDataType<T, Z> type)
 	{
-		return json.has(key.toString()); // TODO: type check?
+		Objects.requireNonNull(key, "key");
+		Objects.requireNonNull(type, "type");
+		
+		JsonCompatiblePrimitive<T> primitive = primitive(type);
+		@NullOr JsonElement existing = json.get(key.toString());
+		return existing != null && primitive.isInstance(existing);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public @NullOr <T, Z> Z get(NamespacedKey key, PersistentDataType<T, Z> type)
 	{
-		@NullOr JsonCompatiblePrimitive<T> primitive =
-			(JsonCompatiblePrimitive<T>) PersistentJsonType.TYPES.get(type.getPrimitiveType());
+		Objects.requireNonNull(key, "key");
+		Objects.requireNonNull(type, "type");
 		
-		if (primitive == null)
-		{
-			throw new IllegalArgumentException(
-				"Unsupported primitive type: " + type + " (" + type.getPrimitiveType() + ")"
-			);
-		}
+		JsonCompatiblePrimitive<T> primitive = primitive(type);
 		
 		@NullOr JsonElement element = json.get(key.toString());
 		if (element == null) { return null; }
+		
+		if (!primitive.isInstance(element))
+		{
+			throw new IllegalArgumentException(
+				"Existing element is incompatible with requested type " +
+				primitive.getPrimitiveType().getSimpleName() + ": " + element
+			);
+		}
 		
 		return type.fromPrimitive(primitive.getFromJson(element), getAdapterContext());
 	}
@@ -130,7 +152,7 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 	@Override
 	public void remove(NamespacedKey key)
 	{
-		json.remove(key.toString());
+		json.remove(Objects.requireNonNull(key, "key").toString());
 	}
 	
 	@Override

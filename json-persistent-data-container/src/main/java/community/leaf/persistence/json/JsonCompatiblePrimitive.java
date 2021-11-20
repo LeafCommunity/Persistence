@@ -15,15 +15,20 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.Objects;
 
 @SuppressWarnings("NullableProblems")
-public abstract class JsonCompatiblePrimitive<T> implements JsonPrimitiveGetter<T>, JsonPrimitiveSetter<T>, PersistentDataType<T, T>
+public abstract class JsonCompatiblePrimitive<T> implements
+	JsonPrimitiveGetter<T>, JsonPrimitiveInstanceOf, JsonPrimitiveSetter<T>, PersistentDataType<T, T>
 {
-	static <T> JsonCompatiblePrimitive<T> of(Class<T> type, JsonPrimitiveGetter<T> getter, JsonPrimitiveSetter<T> setter)
-	{
-		Objects.requireNonNull(getter, "getter");
-		Objects.requireNonNull(setter, "setter");
-		
+	static <T> JsonCompatiblePrimitive<T> of(
+		Class<T> type,
+		JsonPrimitiveInstanceOf check,
+		JsonPrimitiveGetter<T> getter,
+		JsonPrimitiveSetter<T> setter
+	) {
 		return new JsonCompatiblePrimitive<>(type)
 		{
+			@Override
+			public boolean isInstance(JsonElement element) { return check.isInstance(element); }
+			
 			@Override
 			public T getFromJson(JsonElement element) { return getter.getFromJson(element); }
 			

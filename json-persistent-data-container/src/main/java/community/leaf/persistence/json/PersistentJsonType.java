@@ -10,6 +10,7 @@ package community.leaf.persistence.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.lang.reflect.Modifier;
@@ -26,29 +27,70 @@ public class PersistentJsonType
 	private PersistentJsonType() { throw new UnsupportedOperationException(); }
 	
 	public static final JsonCompatiblePrimitive<Byte> BYTE =
-		JsonCompatiblePrimitive.of(Byte.class, JsonElement::getAsByte, JsonPrimitiveSetter.number());
+		JsonCompatiblePrimitive.of(
+			Byte.class,
+			JsonPrimitiveInstanceOf.number(),
+			JsonElement::getAsByte,
+			JsonPrimitiveSetter.number()
+		);
 	
 	public static final JsonCompatiblePrimitive<Short> SHORT =
-		JsonCompatiblePrimitive.of(Short.class, JsonElement::getAsShort, JsonPrimitiveSetter.number());
+		JsonCompatiblePrimitive.of(
+			Short.class,
+			JsonPrimitiveInstanceOf.number(),
+			JsonElement::getAsShort,
+			JsonPrimitiveSetter.number()
+		);
 	
 	public static final JsonCompatiblePrimitive<Integer> INTEGER =
-		JsonCompatiblePrimitive.of(Integer.class, JsonElement::getAsInt, JsonPrimitiveSetter.number());
+		JsonCompatiblePrimitive.of(
+			Integer.class,
+			JsonPrimitiveInstanceOf.number(),
+			JsonElement::getAsInt,
+			JsonPrimitiveSetter.number()
+		);
 	
 	public static final JsonCompatiblePrimitive<Long> LONG =
-		JsonCompatiblePrimitive.of(Long.class, JsonElement::getAsLong, JsonPrimitiveSetter.number());
+		JsonCompatiblePrimitive.of(
+			Long.class,
+			JsonPrimitiveInstanceOf.number(),
+			JsonElement::getAsLong,
+			JsonPrimitiveSetter.number()
+		);
 	
 	public static final JsonCompatiblePrimitive<Float> FLOAT =
-		JsonCompatiblePrimitive.of(Float.class, JsonElement::getAsFloat, JsonPrimitiveSetter.number());
+		JsonCompatiblePrimitive.of(
+			Float.class,
+			JsonPrimitiveInstanceOf.number(),
+			JsonElement::getAsFloat,
+			JsonPrimitiveSetter.number()
+		);
 	
 	public static final JsonCompatiblePrimitive<Double> DOUBLE =
-		JsonCompatiblePrimitive.of(Double.class, JsonElement::getAsDouble, JsonPrimitiveSetter.number());
+		JsonCompatiblePrimitive.of(
+			Double.class,
+			JsonPrimitiveInstanceOf.number(),
+			JsonElement::getAsDouble,
+			JsonPrimitiveSetter.number()
+		);
 	
 	public static final JsonCompatiblePrimitive<String> STRING =
-		JsonCompatiblePrimitive.of(String.class, JsonElement::getAsString, JsonObject::addProperty);
+		JsonCompatiblePrimitive.of(
+			String.class,
+			JsonPrimitiveInstanceOf.primitive(JsonPrimitive::isString),
+			JsonElement::getAsString,
+			JsonObject::addProperty
+		);
 	
 	public static final JsonCompatiblePrimitive<byte[]> BYTE_ARRAY =
 		new JsonCompatiblePrimitive<>(byte[].class)
 		{
+			@Override
+			public boolean isInstance(JsonElement element)
+			{
+				return element.isJsonArray();
+			}
+			
 			@Override
 			public byte[] getFromJson(JsonElement element)
 			{
@@ -71,6 +113,12 @@ public class PersistentJsonType
 		new JsonCompatiblePrimitive<>(int[].class)
 		{
 			@Override
+			public boolean isInstance(JsonElement element)
+			{
+				return element.isJsonArray();
+			}
+			
+			@Override
 			public int[] getFromJson(JsonElement element)
 			{
 				JsonArray array = element.getAsJsonArray();
@@ -92,6 +140,12 @@ public class PersistentJsonType
 		new JsonCompatiblePrimitive<>(long[].class)
 		{
 			@Override
+			public boolean isInstance(JsonElement element)
+			{
+				return element.isJsonArray();
+			}
+			
+			@Override
 			public long[] getFromJson(JsonElement element)
 			{
 				JsonArray array = element.getAsJsonArray();
@@ -112,6 +166,7 @@ public class PersistentJsonType
 	public static final JsonCompatiblePrimitive<PersistentDataContainer> TAG_CONTAINER =
 		JsonCompatiblePrimitive.of(
 			PersistentDataContainer.class,
+			JsonElement::isJsonObject,
 			(element) -> new JsonPersistentDataContainer(element.getAsJsonObject()),
 			(object, key, primitive) -> object.add(key, ((JsonPersistentDataContainer) primitive).json())
 		);
@@ -119,6 +174,12 @@ public class PersistentJsonType
 	public static final JsonCompatiblePrimitive<PersistentDataContainer[]> TAG_CONTAINER_ARRAY =
 		new JsonCompatiblePrimitive<>(PersistentDataContainer[].class)
 		{
+			@Override
+			public boolean isInstance(JsonElement element)
+			{
+				return element.isJsonArray();
+			}
+			
 			@Override
 			public PersistentDataContainer[] getFromJson(JsonElement element)
 			{
