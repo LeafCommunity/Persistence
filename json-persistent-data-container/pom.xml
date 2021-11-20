@@ -12,4 +12,12 @@
 
 	<artifactId>json-persistent-data-container</artifactId>
 
+	<dependencies>
+		<dependency>
+			<groupId>community.leaf.persistence</groupId>
+			<artifactId>persistence-utilities</artifactId>
+			<version>${revision}</version>
+		</dependency>
+	</dependencies>
+
 </project>

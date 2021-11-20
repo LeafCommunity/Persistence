@@ -17,10 +17,10 @@
 	</properties>
 
 	<dependencies>
-		<!-- All Persistence Utilities (via local-project) -->
+		<!-- JSON Persistent Data Container (via local-project) -->
 		<dependency>
 			<groupId>community.leaf.persistence</groupId>
-			<artifactId>persistence-all</artifactId>
+			<artifactId>json-persistent-data-container</artifactId>
 			<version>${revision}</version>
 		</dependency>
 	</dependencies>
