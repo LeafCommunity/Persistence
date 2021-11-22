@@ -3,7 +3,7 @@
 [![](https://jitpack.io/v/community.leaf/persistence.svg)](https://jitpack.io/#community.leaf/persistence "Get maven artifacts on JitPack")
 [![](https://img.shields.io/badge/License-MPL--2.0-blue)](./LICENSE "Project License: MPL-2.0")
 [![](https://img.shields.io/badge/Java-11-orange)](# "Java Version: 11")
-[![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/persistence/persistence-parent/latest/javadoc/ "View Javadocs")
+[![](https://img.shields.io/badge/View-Javadoc-%234D7A97)](https://javadoc.jitpack.io/community/leaf/persistence/persistence-parent/latest/javadoc/ "View Javadoc")
 
 PersistentDataContainer utilities.
 
