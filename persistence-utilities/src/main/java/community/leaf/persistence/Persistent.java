@@ -7,11 +7,13 @@
  */
 package community.leaf.persistence;
 
+import community.leaf.persistence.keys.Namespaced;
+import community.leaf.persistence.keys.PluginNamespace;
 import org.bukkit.persistence.PersistentDataAdapterContext;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -54,9 +56,15 @@ public interface Persistent<T, Z extends Persistent<T, Z>>
 		);
 	}
 	
-	static PersistentDataContainer container(PersistentDataHolder holder)
+	static NamespaceDataSource namespace(Namespaced namespace)
 	{
-		return holder.getPersistentDataContainer();
+		Objects.requireNonNull(namespace, "namespace");
+		return () -> namespace;
+	}
+	
+	static NamespaceDataSource namespace(Plugin plugin)
+	{
+		return namespace(PluginNamespace.of(plugin));
 	}
 	
 	PersistentDataType<T, Z> persistentDataType();

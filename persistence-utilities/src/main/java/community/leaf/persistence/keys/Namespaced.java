@@ -5,15 +5,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-/**
- * community.leaf.persistence:<b>persistence-utilities</b>
- */
-module community.leaf.persistence
+package community.leaf.persistence.keys;
+
+import org.bukkit.NamespacedKey;
+
+public interface Namespaced
 {
-	requires static pl.tlinkowski.annotation.basic;
+	String namespace();
 	
-	requires org.bukkit;
+	NamespacedKey key(String key);
 	
-	exports community.leaf.persistence;
-	exports community.leaf.persistence.keys;
+	default boolean isWithinNamespace(NamespacedKey key)
+	{
+		return namespace().equals(key.getNamespace());
+	}
 }

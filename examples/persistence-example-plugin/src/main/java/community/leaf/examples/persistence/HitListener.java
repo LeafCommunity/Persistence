@@ -1,6 +1,7 @@
 package community.leaf.examples.persistence;
 
 import community.leaf.persistence.Persistent;
+import community.leaf.persistence.PersistentNamespaceData;
 import community.leaf.persistence.json.JsonPersistentDataContainer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Entity;
@@ -11,12 +12,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.persistence.PersistentDataContainer;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.UUID;
-
-import static community.leaf.examples.persistence.ExamplePersistencePlugin.key;
 
 public class HitListener implements Listener
 {
@@ -37,10 +35,10 @@ public class HitListener implements Listener
 		if (!(damager instanceof Player)) { return; }
 		
 		Player player = (Player) damager;
-		PersistentDataContainer data = Persistent.container(hurt);
+		PersistentNamespaceData data = Persistent.namespace(plugin).data(hurt);
 		
-		HitCounter counter = data.getOrDefault(key("hit_counter"), HitCounter.TYPE, HitCounter.NONE).hit(player);
-		data.set(key("hit_counter"), HitCounter.TYPE, counter);
+		HitCounter counter = data.getOrDefault("hit_counter", HitCounter.TYPE, HitCounter.NONE).hit(player);
+		data.set("hit_counter", HitCounter.TYPE, counter);
 		
 		player.sendMessage("Ouch! " + hurt.getName() + " hits: " + ChatColor.RED + counter.hits());
 	}
@@ -51,7 +49,7 @@ public class HitListener implements Listener
 		Entity dead = event.getEntity();
 		if (dead instanceof Player) { return; }
 		
-		@NullOr HitCounter counter = Persistent.container(dead).get(key("hit_counter"), HitCounter.TYPE);
+		@NullOr HitCounter counter = Persistent.namespace(plugin).data(dead).get("hit_counter", HitCounter.TYPE);
 		if (counter == null) { return; }
 		
 		@NullOr UUID killerUuid = counter.lastHit();
@@ -74,7 +72,7 @@ public class HitListener implements Listener
 		Player player = event.getPlayer();
 		Entity clicked = event.getRightClicked();
 		
-		@NullOr HitCounter counter = Persistent.container(clicked).get(key("hit_counter"), HitCounter.TYPE);
+		@NullOr HitCounter counter = Persistent.namespace(plugin).data(clicked).get("hit_counter", HitCounter.TYPE);
 		if (counter == null) { return; }
 		
 		String json = JsonPersistentDataContainer.of(counter).toPrettyJsonString();

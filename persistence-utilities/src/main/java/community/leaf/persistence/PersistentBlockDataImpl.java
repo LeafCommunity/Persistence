@@ -1,31 +1,38 @@
+/*
+ * Copyright © 2021, RezzedUp <https://github.com/LeafCommunity/Persistence>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package community.leaf.persistence;
 
+import community.leaf.persistence.keys.Namespaced;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.Objects;
 
 final class PersistentBlockDataImpl extends ProxiedPersistentDataContainer implements PersistentBlockData
 {
-	private final Plugin plugin;
+	private final Namespaced namespace;
 	private final Block block;
 	private final NamespacedKey key;
 	
 	private @NullOr PersistentDataContainer container;
 	
-	PersistentBlockDataImpl(Plugin plugin, Block block)
+	PersistentBlockDataImpl(Namespaced namespace, Block block)
 	{
-		this.plugin = plugin;
+		this.namespace = Objects.requireNonNull(namespace, "namespace");
 		this.block = block;
-		this.key = new NamespacedKey(plugin, PersistentBlockData.chunkKey(block));
+		this.key = namespace.key(PersistentBlockData.chunkKey(block));
 	}
 	
 	@Override
-	public Plugin plugin() { return plugin; }
+	public Namespaced namespace() { return namespace; }
 	
 	@Override
 	public Block getBlock() { return block; }
@@ -39,7 +46,7 @@ final class PersistentBlockDataImpl extends ProxiedPersistentDataContainer imple
 	}
 	
 	@Override
-	public PersistentDataContainer container()
+	protected PersistentDataContainer container()
 	{
 		if (container != null) { return container; }
 		
