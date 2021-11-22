@@ -18,6 +18,7 @@ public class ExamplePersistencePlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
 		getServer().getPluginManager().registerEvents(new HitListener(this), this);
 	}
 }
