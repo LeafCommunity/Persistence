@@ -8,13 +8,15 @@
 package community.leaf.persistence;
 
 import community.leaf.persistence.keys.Namespaced;
-import community.leaf.persistence.keys.PluginNamespace;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.plugin.Plugin;
+
+import java.util.regex.Pattern;
 
 public interface PersistentBlockData extends PersistentNamespaceData
 {
+	Pattern CHUNK_KEY_PATTERN = Pattern.compile("block/x(?<x>1[0-5]|\\d)/y(?<y>-?\\d+)/z(?<z>1[0-5]|\\d)");
+	
 	static String chunkKey(int x, int y, int z)
 	{
 		int chunkX = x & 0xF;
@@ -30,11 +32,6 @@ public interface PersistentBlockData extends PersistentNamespaceData
 	static PersistentBlockData of(Namespaced namespace, Block block)
 	{
 		return new PersistentBlockDataImpl(namespace, block);
-	}
-	
-	static PersistentBlockData of(Plugin plugin, Block block)
-	{
-		return of(PluginNamespace.of(plugin), block);
 	}
 	
 	Block getBlock();

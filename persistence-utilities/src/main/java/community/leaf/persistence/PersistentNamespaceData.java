@@ -8,17 +8,14 @@
 package community.leaf.persistence;
 
 import community.leaf.persistence.keys.Namespaced;
-import community.leaf.persistence.keys.PluginNamespace;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface PersistentNamespaceData extends PersistentDataContainer
 {
@@ -31,16 +28,6 @@ public interface PersistentNamespaceData extends PersistentDataContainer
 	{
 		Objects.requireNonNull(holder, "holder");
 		return of(namespace, holder.getPersistentDataContainer());
-	}
-	
-	static PersistentNamespaceData of(Plugin plugin, PersistentDataContainer container)
-	{
-		return of(PluginNamespace.of(plugin), container);
-	}
-	
-	static PersistentNamespaceData of(Plugin plugin, PersistentDataHolder holder)
-	{
-		return of(PluginNamespace.of(plugin), holder);
 	}
 	
 	Namespaced namespace();
@@ -70,8 +57,13 @@ public interface PersistentNamespaceData extends PersistentDataContainer
 		remove(namespace().key(key));
 	}
 	
-	default Set<NamespacedKey> getKeysInNamespace()
+	default Stream<NamespacedKey> keys()
 	{
-		return getKeys().stream().filter(namespace()::isWithinNamespace).collect(Collectors.toSet());
+		return getKeys().stream();
+	}
+	
+	default Stream<NamespacedKey> keysInNamespace()
+	{
+		return keys().filter(namespace()::isWithinNamespace);
 	}
 }

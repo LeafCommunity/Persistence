@@ -1,5 +1,6 @@
 package community.leaf.examples.persistence;
 
+import community.leaf.persistence.Persistent;
 import community.leaf.persistence.PersistentBlockData;
 import community.leaf.persistence.PersistentDataTypes;
 import org.bukkit.Material;
@@ -27,14 +28,14 @@ public class BlockPlaceListener implements Listener
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
-		PersistentBlockData data = PersistentBlockData.of(plugin, event.getBlockPlaced());
+		PersistentBlockData data = Persistent.namespace(plugin).data(event.getBlockPlaced());
 		data.set("placed_by", PersistentDataTypes.UUID, event.getPlayer().getUniqueId());
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event)
 	{
-		PersistentBlockData.of(plugin, event.getBlock()).remove("placed_by");
+		Persistent.namespace(plugin).data(event.getBlock()).remove("placed_by");
 	}
 	
 	@EventHandler(ignoreCancelled = true)
@@ -45,7 +46,7 @@ public class BlockPlaceListener implements Listener
 		@NullOr Block block = event.getClickedBlock();
 		if (block == null || block.getType() == Material.AIR) { return; }
 		
-		PersistentBlockData data = PersistentBlockData.of(plugin, block);
+		PersistentBlockData data = Persistent.namespace(plugin).data(block);
 		
 		@NullOr UUID placedBy = data.get("placed_by", PersistentDataTypes.UUID);
 		if (placedBy == null) { return; }

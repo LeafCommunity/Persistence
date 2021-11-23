@@ -56,13 +56,13 @@ public interface Persistent<T, Z extends Persistent<T, Z>>
 		);
 	}
 	
-	static NamespaceDataSource namespace(Namespaced namespace)
+	static PersistentNamespaceDataSource namespace(Namespaced namespace)
 	{
 		Objects.requireNonNull(namespace, "namespace");
 		return () -> namespace;
 	}
 	
-	static NamespaceDataSource namespace(Plugin plugin)
+	static PersistentNamespaceDataSource namespace(Plugin plugin)
 	{
 		return namespace(PluginNamespace.of(plugin));
 	}

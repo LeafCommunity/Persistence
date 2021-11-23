@@ -8,27 +8,36 @@
 package community.leaf.persistence;
 
 import community.leaf.persistence.keys.Namespaced;
+import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 
 @FunctionalInterface
-public interface NamespaceDataSource
+public interface PersistentNamespaceDataSource
 {
 	Namespaced namespace();
 	
-	default PersistentNamespaceData data(PersistentDataHolder holder)
-	{
-		return PersistentNamespaceData.of(namespace(), holder.getPersistentDataContainer());
-	}
-	
-	default PersistentNamespaceData data(PersistentDataContainer container)
+	default PersistentNamespaceData wrap(PersistentDataContainer container)
 	{
 		return PersistentNamespaceData.of(namespace(), container);
+	}
+	
+	default PersistentNamespaceData data(PersistentDataHolder holder)
+	{
+		if (holder instanceof Block) { return data((Block) holder); }
+		if (holder instanceof Chunk) { return data((Chunk) holder); }
+		
+		return PersistentNamespaceData.of(namespace(), holder.getPersistentDataContainer());
 	}
 	
 	default PersistentBlockData data(Block block)
 	{
 		return PersistentBlockData.of(namespace(), block);
+	}
+	
+	default PersistentChunkData data(Chunk chunk)
+	{
+		return PersistentChunkData.of(namespace(), chunk);
 	}
 }
