@@ -25,7 +25,6 @@ public interface PersistentNamespaceDataSource
 	
 	default PersistentNamespaceData data(PersistentDataHolder holder)
 	{
-		if (holder instanceof Block) { return data((Block) holder); }
 		if (holder instanceof Chunk) { return data((Chunk) holder); }
 		
 		return PersistentNamespaceData.of(namespace(), holder.getPersistentDataContainer());
