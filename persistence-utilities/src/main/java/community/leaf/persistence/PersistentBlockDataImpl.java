@@ -35,10 +35,10 @@ final class PersistentBlockDataImpl extends ProxiedPersistentDataContainer imple
 	public Namespaced namespace() { return namespace; }
 	
 	@Override
-	public Block getBlock() { return block; }
+	public Block block() { return block; }
 	
 	@Override
-	public NamespacedKey getBlockKey() { return key; }
+	public NamespacedKey chunkKey() { return key; }
 	
 	private PersistentDataContainer chunkDataContainer()
 	{

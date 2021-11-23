@@ -34,9 +34,9 @@ public interface PersistentBlockData extends PersistentNamespaceData
 		return new PersistentBlockDataImpl(namespace, block);
 	}
 	
-	Block getBlock();
+	Block block();
 	
-	NamespacedKey getBlockKey();
+	NamespacedKey chunkKey();
 	
 	void removeAll();
 	
