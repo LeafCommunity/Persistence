@@ -31,23 +31,59 @@ public class JsonPersistentDataContainer implements PersistentDataContainer
 	
 	private static final JsonParser PARSER = new JsonParser();
 	
+	@SuppressWarnings("unchecked")
+	public static JsonPersistentDataContainer of(PersistentDataContainer container)
+	{
+		Objects.requireNonNull(container, "container");
+		if (container instanceof JsonPersistentDataContainer) { return (JsonPersistentDataContainer) container; }
+		
+		JsonPersistentDataContainer json = new JsonPersistentDataContainer();
+		
+		conversion: for (NamespacedKey key : container.getKeys())
+		{
+			for (JsonCompatiblePrimitive<?> type : PersistentJsonType.TYPES.values())
+			{
+				if (container.has(key, type))
+				{
+					@NullOr Object value = container.get(key, type);
+					
+					if (value != null)
+					{
+						json.set(key, (PersistentDataType<Object, Object>) type, value);
+						continue conversion;
+					}
+				}
+			}
+		}
+		
+		return json;
+	}
+	
 	public static <Z> JsonPersistentDataContainer of(PersistentDataType<PersistentDataContainer, Z> type, Z complex)
 	{
-		return (JsonPersistentDataContainer) type.toPrimitive(complex, JsonPersistentDataContainer::new);
+		Objects.requireNonNull(type, "type");
+		Objects.requireNonNull(complex, "complex");
+		
+		return of(type.toPrimitive(complex, JsonPersistentDataContainer::new));
 	}
 	
 	public static <Z extends Persistent<PersistentDataContainer, Z>> JsonPersistentDataContainer of(Z complex)
 	{
+		Objects.requireNonNull(complex, "complex");
 		return of(complex.persistentDataType(), complex);
 	}
 	
 	public static JsonPersistentDataContainer fromJsonString(String json)
 	{
+		Objects.requireNonNull(json, "json");
 		return new JsonPersistentDataContainer(PARSER.parse(json).getAsJsonObject());
 	}
 	
 	public static <Z> Z fromJsonString(PersistentDataType<PersistentDataContainer, Z> type, String json)
 	{
+		Objects.requireNonNull(type, "type");
+		Objects.requireNonNull(json, "json");
+		
 		return type.fromPrimitive(fromJsonString(json), JsonPersistentDataContainer::new);
 	}
 	
