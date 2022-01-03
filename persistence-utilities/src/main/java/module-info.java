@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021, RezzedUp <https://github.com/LeafCommunity/Persistence>
+ * Copyright © 2021-2022, RezzedUp <https://github.com/LeafCommunity/Persistence>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,10 +10,10 @@
  */
 module community.leaf.persistence
 {
-	requires static pl.tlinkowski.annotation.basic;
-	
-	requires org.bukkit;
-	
-	exports community.leaf.persistence;
-	exports community.leaf.persistence.keys;
+    requires static pl.tlinkowski.annotation.basic;
+    
+    requires org.bukkit;
+    
+    exports community.leaf.persistence;
+    exports community.leaf.persistence.keys;
 }

@@ -18,41 +18,41 @@ import java.util.UUID;
 
 public class BlockPlaceListener implements Listener
 {
-	private final ExamplePersistencePlugin plugin;
-	
-	public BlockPlaceListener(ExamplePersistencePlugin plugin)
-	{
-		this.plugin = plugin;
-	}
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onBlockPlace(BlockPlaceEvent event)
-	{
-		PersistentBlockData data = Persistent.namespace(plugin).data(event.getBlockPlaced());
-		data.set("placed_by", PersistentDataTypes.UUID, event.getPlayer().getUniqueId());
-	}
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onBlockBreak(BlockBreakEvent event)
-	{
-		Persistent.namespace(plugin).data(event.getBlock()).remove("placed_by");
-	}
-	
-	@EventHandler(ignoreCancelled = true)
-	public void onClickOnBlock(PlayerInteractEvent event)
-	{
-		if (event.getHand() != EquipmentSlot.HAND) { return; }
-		
-		@NullOr Block block = event.getClickedBlock();
-		if (block == null || block.getType() == Material.AIR) { return; }
-		
-		PersistentBlockData data = Persistent.namespace(plugin).data(block);
-		
-		@NullOr UUID placedBy = data.get("placed_by", PersistentDataTypes.UUID);
-		if (placedBy == null) { return; }
-		
-		event.getPlayer().sendMessage(
-			block.getType() + " placed by: " + plugin.getServer().getOfflinePlayer(placedBy).getName()
-		);
-	}
+    private final ExamplePersistencePlugin plugin;
+    
+    public BlockPlaceListener(ExamplePersistencePlugin plugin)
+    {
+        this.plugin = plugin;
+    }
+    
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockPlace(BlockPlaceEvent event)
+    {
+        PersistentBlockData data = Persistent.namespace(plugin).data(event.getBlockPlaced());
+        data.set("placed_by", PersistentDataTypes.UUID, event.getPlayer().getUniqueId());
+    }
+    
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockBreak(BlockBreakEvent event)
+    {
+        Persistent.namespace(plugin).data(event.getBlock()).remove("placed_by");
+    }
+    
+    @EventHandler(ignoreCancelled = true)
+    public void onClickOnBlock(PlayerInteractEvent event)
+    {
+        if (event.getHand() != EquipmentSlot.HAND) { return; }
+        
+        @NullOr Block block = event.getClickedBlock();
+        if (block == null || block.getType() == Material.AIR) { return; }
+        
+        PersistentBlockData data = Persistent.namespace(plugin).data(block);
+        
+        @NullOr UUID placedBy = data.get("placed_by", PersistentDataTypes.UUID);
+        if (placedBy == null) { return; }
+        
+        event.getPlayer().sendMessage(
+            block.getType() + " placed by: " + plugin.getServer().getOfflinePlayer(placedBy).getName()
+        );
+    }
 }

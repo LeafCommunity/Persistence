@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021, RezzedUp <https://github.com/LeafCommunity/Persistence>
+ * Copyright © 2021-2022, RezzedUp <https://github.com/LeafCommunity/Persistence>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,30 +15,30 @@ import java.util.regex.Pattern;
 
 public interface PersistentBlockData extends PersistentNamespaceData
 {
-	Pattern CHUNK_KEY_PATTERN = Pattern.compile("block/x(?<x>1[0-5]|\\d)/y(?<y>-?\\d+)/z(?<z>1[0-5]|\\d)");
-	
-	static String chunkKey(int x, int y, int z)
-	{
-		int chunkX = x & 0xF;
-		int chunkZ = z & 0xF;
-		return "block/x" + chunkX + "/y" + y + "/z" + chunkZ;
-	}
-	
-	static String chunkKey(Block block)
-	{
-		return chunkKey(block.getX(), block.getY(), block.getZ());
-	}
-	
-	static PersistentBlockData of(Namespaced namespace, Block block)
-	{
-		return new PersistentBlockDataImpl(namespace, block);
-	}
-	
-	Block block();
-	
-	NamespacedKey chunkKey();
-	
-	void removeAll();
-	
-	boolean exists();
+    Pattern CHUNK_KEY_PATTERN = Pattern.compile("block/x(?<x>1[0-5]|\\d)/y(?<y>-?\\d+)/z(?<z>1[0-5]|\\d)");
+    
+    static String chunkKey(int x, int y, int z)
+    {
+        int chunkX = x & 0xF;
+        int chunkZ = z & 0xF;
+        return "block/x" + chunkX + "/y" + y + "/z" + chunkZ;
+    }
+    
+    static String chunkKey(Block block)
+    {
+        return chunkKey(block.getX(), block.getY(), block.getZ());
+    }
+    
+    static PersistentBlockData of(Namespaced namespace, Block block)
+    {
+        return new PersistentBlockDataImpl(namespace, block);
+    }
+    
+    Block block();
+    
+    NamespacedKey chunkKey();
+    
+    void removeAll();
+    
+    boolean exists();
 }
